@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+    Registrazione utente
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
+            <div class="input-group">
+                {{ field }}
+            </div>
+            {% if field.help_text %}
+                <div class="input-group">
+                    <small class="input-text text-muted text-left">{{ field.help_text }}</small>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            {% for nferror in login_form.non_field_errors %}
+                <div class="text-danger">{{ nferror }}</div>
+            {% endfor %}
+        {% endif %}
+        <button type="submit" class="btn btn-block btn-primary">Registrati</button>
+    </form>
+{% endblock %}
