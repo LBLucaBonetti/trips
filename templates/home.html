@@ -6,8 +6,8 @@
 {% block content %}
     <h1>Ciao!</h1>
     {% if user.is_authenticated %}
-        <p>Utente loggato</p>
+        <p>Benvenuto, {{ user }}</p>
     {% else %}
-        <p>Utente non loggato</p>
+        <p>Accedi o registrati</p>
     {% endif %}
 {% endblock %}

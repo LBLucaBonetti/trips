@@ -1,19 +1,10 @@
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from users.forms import CustomUserCreationForm
 
 # Create your views here.
 
 
-class CustomUserCreationForm(UserCreationForm):
-
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = UserCreationForm.Meta.fields
-
-
-def register(request):
+def user_register(request):
     context = {}
     user = request.user
 
@@ -32,3 +23,7 @@ def register(request):
         context['form'] = form
 
     return render(request, 'users/register.html', context)
+
+
+def user_login(request):
+    pass
