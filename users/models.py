@@ -32,6 +32,9 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
+    class Meta:
+        verbose_name = "Utente"
+        verbose_name_plural = "Utenti"
     email = models.EmailField(verbose_name="Email", max_length=320, unique=True)
     username = models.CharField(verbose_name="Nome utente", max_length=255, unique=True)
     date_joined = models.DateTimeField(verbose_name="Data di registrazione", auto_now_add=True)
