@@ -8,7 +8,7 @@ from .models import CustomUser
 
 
 class UserAdminInterface(UserAdmin):
-    list_display = ("email", "username", "is_admin", "is_active", "is_staff", "is_superuser", "first_name", "last_name", "phone_number", "birth_date")
+    list_display = ("email", "username", "is_active", "is_superuser", "first_name", "last_name", "phone_number", "birth_date")
     search_fields = ("email", "username")
     readonly_fields = ("date_joined", "last_login")
 
