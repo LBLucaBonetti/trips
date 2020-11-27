@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from .models import CustomUser
 
 
-class UserCreationForm(forms.ModelForm):
+class UserAdminCreationForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Conferma della password", widget=forms.PasswordInput)
 
@@ -31,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-class UserChangeForm(forms.ModelForm):
+class UserAdminChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField(label="Password",
                                          help_text="Le password non vengono salvate in chiaro, quindi non c'è alcun modo di vedere la password per l'utente ma puoi cambiarla facendo click <a href=\"../password/\">qui</a>.")
 
@@ -44,8 +44,8 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UserAdmin(BaseUserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
 
     list_display = ("email", "username", "is_active", "is_superuser", "first_name", "last_name", "phone_number", "birth_date")
     list_filter = ("is_superuser",)
