@@ -80,3 +80,5 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(CustomUser, UserAdmin)
 admin.site.unregister(Group)
+admin.site.site_header = "Pannello di amministrazione di Trips"
+admin.site.site_title = "Trips superuser admin"
