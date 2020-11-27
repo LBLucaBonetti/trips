@@ -6,22 +6,21 @@
 {% block content %}
     <div class="container h-100">
         <div class="card m-3">
+            <h1 class="card-header text-center text-light bg-dark">
+                Registrazione
+            </h1>
             <div class="card-body">
-                <h1 class="card-title text-center">
-                    Registrazione
-                </h1>
                 <form method="post">
                     {% csrf_token %}
+
                     {% for field in form %}
-                        <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
-                        <div class="input-group">
-                            {{ field }}
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
+                            {{field}}
+                            {% if field.help_text %}
+                                <small id="{{ field.name }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
                         </div>
-                        {% if field.help_text %}
-                            <div class="input-group">
-                                <small class="input-text text-muted text-left">{{ field.help_text }}</small>
-                            </div>
-                        {% endif %}
                     {% endfor %}
 
                     {% if form.errors %}
