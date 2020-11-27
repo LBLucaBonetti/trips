@@ -32,7 +32,8 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
+    password = ReadOnlyPasswordHashField(label="Password",
+                                         help_text="Le password non vengono salvate in chiaro, quindi non c'è alcun modo di vedere la password per l'utente ma puoi cambiarla facendo click <a href=\"../password/\">qui</a>.")
 
     class Meta:
         model = CustomUser
