@@ -13,18 +13,7 @@
                 <form method="post">
                     {% csrf_token %}
 
-                    {% for field in form %}
-                        <div class="form-group">
-                            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
-                            {{field}}
-                            {% if field.help_text %}
-                                <small id="{{ field.name }}Help" class="form-text text-muted">{{ field.help_text }}</small>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-
                     {% if form.errors %}
-                        <hr>
                         <h4 class="text-center text-danger">
                             Rilevati errori
                         </h4>
@@ -43,6 +32,20 @@
                             <div class="text-danger text-center">{{ nferror }}</div>
                         {% endfor %}
                     {% endif %}
+
+                    {% if form.errors %}
+                        <hr>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
+                            {{field}}
+                            {% if field.help_text %}
+                                <small id="{{ field.name }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
 
                     <button type="submit" class="btn btn-block btn-primary mt-3">Registrati</button>
                 </form>
