@@ -45,6 +45,7 @@ class CustomUser(AbstractBaseUser):
     is_admin = models.BooleanField(verbose_name="Amministratore", default=False)
     is_active = models.BooleanField(verbose_name="Attivo", default=True)
     is_staff = models.BooleanField(verbose_name="Staff", default=False)
+    # Il parametro is_superuser e' l'unico di cui il modello tiene conto per distinguere un utente normale dagli amministratori
     is_superuser = models.BooleanField(verbose_name="Superutente", default=False)
 
     first_name = models.CharField(verbose_name="Nome", max_length=255)
