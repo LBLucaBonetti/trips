@@ -55,10 +55,22 @@ class UserAdmin(BaseUserAdmin):
         ("Credenziali", {"fields": ("password",)})
     )
     add_fieldsets = (
-        (None, {
+        ("Informazioni", {
             "classes": ("wide",),
-            "fields": ("email", "username", "is_active", "is_superuser", "first_name", "last_name", "phone_number", "birth_date", "password1", "password2"),
+            "fields": ("email", "username", "is_active"),
         }),
+        ("Permessi", {
+            "classes": ("wide",),
+            "fields": ("is_superuser",),
+        }),
+        ("Dati personali", {
+            "classes": ("wide",),
+            "fields": ("first_name", "last_name", "phone_number", "birth_date"),
+        }),
+        ("Credenziali", {
+            "classes": ("wide",),
+            "fields": ("password1", "password2"),
+        })
     )
     search_fields = ("email",)
     ordering = ("email",)
