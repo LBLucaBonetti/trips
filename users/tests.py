@@ -1,7 +1,11 @@
 import datetime
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError, transaction
 from django.test import TestCase
+from django.urls import reverse
+
 from .models import CustomUser
 
 # Create your tests here.
@@ -55,3 +59,90 @@ class UsersTestCase(TestCase):
         self.assertEquals(prova2.last_name, "Prova2Last")
         self.assertEquals(prova2.phone_number, "111111111111111")
         self.assertEquals(prova2.birth_date, birthday)
+
+    def test_cannot_have_two_users_with_same_username_or_email(self):
+        try:
+            with transaction.atomic():
+                u = CustomUser.objects.create(
+                    email="prova1@prova.com",
+                    username="prova1",
+                    first_name="prova1",
+                    last_name="prova1",
+                )
+        except IntegrityError:
+            pass
+
+        try:
+            with transaction.atomic():
+                u = CustomUser.objects.create(
+                    email="prova1@prova.com",
+                    username="prova3",
+                    first_name="prova3",
+                    last_name="prova3",
+                )
+        except IntegrityError:
+            pass
+
+        try:
+            with transaction.atomic():
+                u = CustomUser.objects.create(
+                    email="prova1@prova.com",
+                    username="prova3",
+                    first_name="prova3",
+                    last_name="prova3",
+                )
+        except IntegrityError:
+            pass
+
+        try:
+            with transaction.atomic():
+                u = CustomUser.objects.create(
+                    email="prova3@prova.com",
+                    username="prova1",
+                    first_name="prova3",
+                    last_name="prova3",
+                )
+        except IntegrityError:
+            pass
+
+        try:
+            with transaction.atomic():
+                u = CustomUser.objects.create(
+                    email="prova6@prova.com",
+                    username="prova6",
+                    first_name="prova1",
+                    last_name="prova1",
+                )
+        except IntegrityError:
+            self.fail("Two users sharing only the same first and last name could not be stored")
+
+    def test_can_have_two_users_with_same_first_and_last_name(self):
+        u = CustomUser.objects.create(
+            email="prova4@prova.com",
+            username="prova4",
+            first_name="prova4",
+            last_name="prova4",
+        )
+        try:
+            u = CustomUser.objects.create(
+                email="prova5@prova.com",
+                username="prova5",
+                first_name="prova4",
+                last_name="prova4",
+            )
+        except IntegrityError:
+            return False
+
+    def test_users_can_register(self):
+        users = get_user_model().objects.filter(is_superuser=False).delete()
+        response = self.client.post(reverse("user_register"), data={
+            "email": "pippo@pippo.com",
+            "username": "pippo",
+            "first_name": "pippo",
+            "last_name": "pippo",
+            "password1": "passuord",
+            "password2": "passuord"
+        })
+
+        users = get_user_model().objects.all()
+        self.assertEqual(users.count(), 2)
