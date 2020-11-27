@@ -1,7 +1,10 @@
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 class CustomUserManager(BaseUserManager):
@@ -62,3 +65,9 @@ class CustomUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+@receiver(pre_delete, sender=CustomUser)
+def prevent_superuser_deletion(sender, instance, **kwargs):
+    if instance.is_superuser:
+        raise PermissionDenied
