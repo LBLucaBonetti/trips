@@ -144,5 +144,5 @@ class UsersTestCase(TestCase):
             "password2": "passuord"
         })
 
-        users = get_user_model().objects.all()
-        self.assertEqual(users.count(), 2)
+        users = get_user_model().objects.filter(email="pippo@pippo.com", username="pippo", first_name="pippo", last_name="pippo")
+        self.assertTrue(users)
