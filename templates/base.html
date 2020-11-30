@@ -33,7 +33,10 @@
                 </li>
             {% else %}
                 <li class="nav-item p-1">
-                    <a class="btn btn-block btn-outline-primary" href="{% url 'user_logout' %}" role="button">Logout</a>
+                    <form action="{% url 'user_logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-block btn-outline-primary">Logout</button>
+                    </form>
                 </li>
             {% endif %}
         </ul>
