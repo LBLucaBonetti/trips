@@ -1,6 +1,7 @@
 import datetime
 
-from django.contrib.auth import get_user_model
+import django
+from django.contrib.auth import get_user_model, logout
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
 from django.test import TestCase
@@ -18,19 +19,22 @@ class UsersTestCase(TestCase):
             username="prova1",
             first_name="prova1",
             last_name="prova1",
+            password="passuord"
         )
         CustomUser.objects.create(
             email="prova2@prova.com",
             username="prova2",
             first_name="prova2",
-            last_name="prova2"
+            last_name="prova2",
+            password="passuord"
         )
         CustomUser.objects.create(
             email="admin@admin.com",
             username="admin",
             first_name="admin",
             last_name="admin",
-            is_superuser=True
+            is_superuser=True,
+            password="password123!"
         )
 
     def test_superusers_cannot_be_deleted(self):
@@ -134,7 +138,6 @@ class UsersTestCase(TestCase):
             return False
 
     def test_users_can_register(self):
-        users = get_user_model().objects.filter(is_superuser=False).delete()
         response = self.client.post(reverse("user_register"), data={
             "email": "pippo@pippo.com",
             "username": "pippo",
@@ -146,3 +149,28 @@ class UsersTestCase(TestCase):
 
         users = get_user_model().objects.filter(email="pippo@pippo.com", username="pippo", first_name="pippo", last_name="pippo")
         self.assertTrue(users)
+
+    def test_users_can_login(self):
+        response = self.client.post(reverse("user_login"), data={
+            "username": "prova1@prova.com",
+            "password": "passuord"
+        })
+        prova1 = CustomUser.objects.filter(email="prova1@prova.com").get()
+        self.assertTrue(prova1.is_authenticated)
+
+        response = self.client.post(reverse("user_login"), data={
+            "username": "admin@admin.com",
+            "password": "password123!"
+        })
+        admin = CustomUser.objects.filter(email="admin@admin.com").get()
+        self.assertTrue(admin.is_authenticated)
+
+    def test_users_can_logout_after_login(self):
+        response = self.client.post(reverse("user_login"), data={
+            "username": "prova1@prova.com",
+            "password": "passuord"
+        })
+        prova1 = CustomUser.objects.filter(email="prova1@prova.com").get()
+        self.assertTrue(prova1.is_authenticated)
+        response = self.client.post(reverse("user_logout"))
+        self.assertFalse(prova1.is_authenticated)

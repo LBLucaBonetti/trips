@@ -1,5 +1,8 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from trips.utils import user_is_authenticated
 from users.forms import CustomUserCreationForm, CustomUserLoginForm
 
 
@@ -8,9 +11,8 @@ from users.forms import CustomUserCreationForm, CustomUserLoginForm
 
 def user_register(request):
     context = {}
-    user = request.user
 
-    if user.is_authenticated:
+    if user_is_authenticated(request):
         return redirect("home")
 
     if request.method == "POST":
@@ -29,9 +31,8 @@ def user_register(request):
 
 def user_login(request):
     context = {}
-    user = request.user
 
-    if user.is_authenticated:
+    if user_is_authenticated(request):
         return redirect("home")
 
     if request.method == "POST":
@@ -52,3 +53,10 @@ def user_login(request):
         context["form"] = form
 
     return render(request, "users/login.html", context)
+
+
+@login_required
+def user_logout(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("home")
