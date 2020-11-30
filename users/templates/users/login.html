@@ -4,33 +4,52 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
-            <div class="input-group">
-                {{ field }}
+    <div class="container h-100">
+        <div class="card m-3">
+            <h1 class="card-header text-center text-light bg-dark">
+                Login
+            </h1>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <h4 class="text-center text-danger">
+                            Rilevati errori
+                        </h4>
+                    {% endif %}
+
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <div class="text-danger text-center">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if form.non_field_errors %}
+                        {% for nferror in form.non_field_errors %}
+                            <div class="text-danger text-center">{{ nferror }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                        <hr>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.label_tag }}</label>
+                            {{field}}
+                            {% if field.help_text %}
+                                <small id="{{ field.name }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-block btn-primary mt-3">Accedi</button>
+                </form>
             </div>
-            {% if field.help_text %}
-                <div class="input-group">
-                    <small class="input-text text-muted text-left">{{ field.help_text }}</small>
-                </div>
-            {% endif %}
-        {% endfor %}
-
-        {% for field in form %}
-            {% if field.errors %}
-                {% for error in field.errors %}
-                    <div class="text-danger">{{ error }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-
-        {% if form.non_field_errors %}
-            {% for nferror in login_form.non_field_errors %}
-                <div class="text-danger">{{ nferror }}</div>
-            {% endfor %}
-        {% endif %}
-        <button type="submit" class="btn btn-block btn-primary">Accedi</button>
-    </form>
+        </div>
+    </div>
 {% endblock %}

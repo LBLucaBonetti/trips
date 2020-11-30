@@ -24,12 +24,14 @@
             <li class="nav-item p-1">
                 <a class="nav-link" href="#">Dummy</a>
             </li>
-            <li class="nav-item p-1">
-                <a class="btn btn-block btn-outline-primary" href="{% url 'user_login' %}" role="button">Accedi</a>
-            </li>
-            <li class="nav-item p-1">
-                <a class="btn btn-block btn-outline-primary" href="{% url 'user_register' %}" role="button">Registrati</a>
-            </li>
+            {% if not user.is_authenticated %}
+                <li class="nav-item p-1">
+                    <a class="btn btn-block btn-outline-primary" href="{% url 'user_login' %}" role="button">Accedi</a>
+                </li>
+                <li class="nav-item p-1">
+                    <a class="btn btn-block btn-outline-primary" href="{% url 'user_register' %}" role="button">Registrati</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
